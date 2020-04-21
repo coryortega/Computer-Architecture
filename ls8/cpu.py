@@ -2,12 +2,29 @@
 
 import sys
 
+LDI = 0b10000010
+PRN = 0b01000111
+HLT = 0b00000001
+MUL = 0b10100010
+
 class CPU:
     """Main CPU class."""
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+        self.pc = 0
+        self.reg = [0] * 8
+        self.ram = [0] * 256
+
+# Inside the CPU, there are two internal registers used for memory operations: the Memory Address Register (MAR) and the Memory Data Register (MDR). The MAR contains the address that is being read or written to. The MDR contains the data that was read or the data to write. You don't need to add the MAR or MDR to your CPU class, but they would make handy paramter names for ram_read() and ram_write(), if you wanted.
+
+    def ram_read(self, mar):
+        mdr = self.ram[mar]
+        return mdr
+
+    def ram_write(self, mdr, mar):
+        self.ram[mar] = mdr
+
 
     def load(self):
         """Load a program into memory."""
@@ -62,4 +79,23 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        pass
+        while True:
+            opcode = self.ram[self.pc]
+            operand_a = self.ram_read(self.pc + 1)
+            operand_b = self.ram_read(self.pc + 2)
+            if opcode == LDI:
+                # set the value of a register to an integer
+                self.reg[operand_a] = operand_b
+                self.pc += 3
+            elif opcode == PRN:
+                print(self.reg[operand_a])
+                self.pc += 2
+            elif opcode == MUL:
+                self.alu(opcode, operand_a, operand_b)
+                self.pc += 3
+            elif opcode == HLT:
+                # exiting the system if HLT is encountered
+                sys.exit(0)
+            else:
+                print(f"Did not work")
+                sys.exit(1)
