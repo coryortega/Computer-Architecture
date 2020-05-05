@@ -8,6 +8,7 @@
 
 ### General
 
+
 * [How much of the emulator do I need to implement?](#q100)
 * [Once we get the `HLT` instruction, what should the emulator do?](#q200)
 * [Is the flags `FL` register one of the `Rx` registers, or is it a special register?](#q900)
